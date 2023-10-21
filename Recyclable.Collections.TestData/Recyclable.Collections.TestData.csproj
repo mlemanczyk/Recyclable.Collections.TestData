@@ -34,7 +34,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="morelinq" Version="3.4.2" />
 		<PackageReference Include="Open.Numeric.Primes" Version="3.0.0" />
 		<PackageReference Include="Recyclable.Collections" Version="0.0.6" />
 	</ItemGroup>
