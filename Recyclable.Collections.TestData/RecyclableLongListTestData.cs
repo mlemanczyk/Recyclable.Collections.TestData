@@ -1,5 +1,4 @@
-﻿using MoreLinq;
-using Open.Numeric.Primes;
+﻿using Open.Numeric.Primes;
 using Recyclable.Collections;
 using System.Numerics;
 
@@ -202,9 +201,9 @@ namespace Recyclable.Collections.TestData
 			).ToArray();
 
 			IEnumerable<long> second = Prime.Numbers.StartingAt(7)
-										 .TakeUntil(prime => 
-											prime > ((blockSize * 2) - 1) ||
-											prime >= itemsCount
+										 .TakeWhile(prime => 
+											prime <= ((blockSize * 2) - 1) &&
+											prime < itemsCount
 										);
 
 			primes = primes.Concat(second).ToArray();
