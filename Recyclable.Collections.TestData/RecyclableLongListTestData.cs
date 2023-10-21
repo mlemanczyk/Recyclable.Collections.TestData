@@ -84,12 +84,13 @@ namespace Recyclable.Collections.TestData
 					long[] testData = CreateTestData(itemsCount).ToArray();
 
 					yield return new object[] { $"Array[{itemsCount}]", testData, itemsCount };
-					yield return new object[] { $"ICollection[{itemsCount}]", testData, itemsCount };
-					yield return new object[] { $"ICollection<T>[{itemsCount}]", testData, itemsCount };
-					yield return new object[] { $"IEnumerable[{itemsCount}]", testData, itemsCount };
+					yield return new object[] { $"ICollection[{itemsCount}]", new CustomICollection<long>(testData), itemsCount };
+					yield return new object[] { $"ICollection<T>[{itemsCount}]", new CustomICollectionT<long>(testData.ToList()), itemsCount };
+					yield return new object[] { $"IEnumerable[{itemsCount}]", new EnumerableWithoutCount<long>(testData), itemsCount };
 					yield return new object[] { $"IEnumerable<T>[{itemsCount}] without non-enumerated count", new EnumerableWithoutCount<long>(testData), itemsCount };
-					yield return new object[] { $"IList<T>[{itemsCount}]", new CustomIList<long>(testData), itemsCount };
-					yield return new object[] { $"IReadOnlyList<T>[{itemsCount}])", testData, itemsCount };
+					yield return new object[] { $"IList[{itemsCount}]", new CustomIList<long>(testData), itemsCount };
+					yield return new object[] { $"IList<T>[{itemsCount}]", new CustomIListT<long>(testData), itemsCount };
+					yield return new object[] { $"IReadOnlyList<T>[{itemsCount}])", new CustomIReadOnlyList<long>(testData), itemsCount };
 					yield return new object[] { $"List<T>[{itemsCount}]", testData.ToList(), itemsCount };
 					yield return new object[] { $"ReadOnlySpan<T>[{itemsCount}]", testData, itemsCount };
 					yield return new object[] { $"RecyclableList<T>[{itemsCount}]", testData.ToRecyclableList(), itemsCount };
@@ -114,15 +115,16 @@ namespace Recyclable.Collections.TestData
 					break;
 
 				case true:
-					IEnumerable<object> testRefData = CreateRefTestData(itemsCount).ToArray();
+					object[] testRefData = CreateRefTestData(itemsCount).ToArray();
 
 					yield return new object[] { $"Array[{itemsCount}]", testRefData, itemsCount };
-					yield return new object[] { $"ICollection(itemsCount: {itemsCount}", testRefData, itemsCount };
-					yield return new object[] { $"ICollection<T>(itemsCount: {itemsCount}", testRefData, itemsCount };
-					yield return new object[] { $"IEnumerable(itemsCount: {itemsCount})", testRefData, itemsCount };
+					yield return new object[] { $"ICollection(itemsCount: {itemsCount}", new CustomICollection<object>(testRefData), itemsCount };
+					yield return new object[] { $"ICollection<T>(itemsCount: {itemsCount}", new CustomICollectionT<object>(testRefData.ToList()), itemsCount };
+					yield return new object[] { $"IEnumerable(itemsCount: {itemsCount})", new EnumerableWithoutCount<object>(testRefData), itemsCount };
 					yield return new object[] { $"IEnumerable<T>(itemsCount: {itemsCount}) without non-enumerated count", new EnumerableWithoutCount<object>(testRefData), itemsCount };
-					yield return new object[] { $"IList<T>(itemsCount: {itemsCount})", new CustomIList<object>(testRefData), itemsCount };
-					yield return new object[] { $"IReadOnlyList<T>(itemsCount: {itemsCount})", testRefData, itemsCount };
+					yield return new object[] { $"IList(itemsCount: {itemsCount})", new CustomIList<object>(testRefData), itemsCount };
+					yield return new object[] { $"IList<T>(itemsCount: {itemsCount})", new CustomIListT<object>(testRefData), itemsCount };
+					yield return new object[] { $"IReadOnlyList<T>(itemsCount: {itemsCount})", new CustomIReadOnlyList<object>(testRefData), itemsCount };
 					yield return new object[] { $"List<T>(itemsCount: {itemsCount}", testRefData.ToList(), itemsCount };
 					yield return new object[] { $"ReadOnlySpan<T>[{itemsCount}]", testRefData, itemsCount };
 					yield return new object[] { $"RecyclableList<T>(itemsCount: {itemsCount})", testRefData.ToRecyclableList(), itemsCount };
@@ -191,11 +193,11 @@ namespace Recyclable.Collections.TestData
 		public static IEnumerable<object[]> SourceRefDataVariants => CreateSourceDataVariants(true);
 		public static IEnumerable<object[]> SourceRefDataWithBlockSizeVariants { get; } = CombineSourceDataWithBlockSize(SourceRefDataVariants);
 
-		private static IEnumerable<long> _initialItemIndexVariants => new long[] { 0, 1, 2, 3, 4, 5 };
+		private static IEnumerable<long> InitialItemIndexVariants => new long[] { 0, 1, 2, 3, 4, 5 };
 		private static IEnumerable<long> CreateItemIndexVariants(long itemsCount, int blockSize)
 		{
-			IEnumerable<long>  primes = _initialItemIndexVariants.Concat(
-				_initialItemIndexVariants.SelectMany(index => new long[] { blockSize - index, blockSize + index })
+			IEnumerable<long>  primes = InitialItemIndexVariants.Concat(
+				InitialItemIndexVariants.SelectMany(index => new long[] { blockSize - index, blockSize + index })
 				//new long[] { blockSize - 3, blockSize - 2, blockSize - 1, blockSize, blockSize + 1, blockSize + 2, blockSize + 3 }
 			).ToArray();
 

@@ -2,7 +2,7 @@
 
 namespace Recyclable.Collections.TestData
 {
-	public class EnumerableWithoutCount<T> : IEnumerable<T>
+	public class EnumerableWithoutCount<T> : IEnumerable, IEnumerable<T>
 	{
 		private readonly IEnumerable<T> _testData;
 
@@ -11,7 +11,8 @@ namespace Recyclable.Collections.TestData
 			_testData = testData;
 		}
 
-		public IEnumerator<T> GetEnumerator() => _testData.GetEnumerator();
-		IEnumerator IEnumerable.GetEnumerator() => _testData.GetEnumerator();
+		public IEnumerator GetEnumerator() => _testData.GetEnumerator();
+
+		IEnumerator<T> IEnumerable<T>.GetEnumerator() => _testData.GetEnumerator();
 	}
 }
