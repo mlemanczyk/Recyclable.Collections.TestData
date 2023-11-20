@@ -275,7 +275,54 @@ namespace Recyclable.Collections.TestData
 			}
 		}
 
+		public static IEnumerable<object[]> CombineSourceRefDataWithBlockSizeWithItemIndexWithRange(bool refType)
+		{
+			IEnumerable<object[]> sourceData = refType switch
+			{
+				false => SourceDataWithBlockSizeVariants,
+				true => SourceRefDataWithBlockSizeVariants
+			};
+
+			foreach (var testCase in sourceData)
+			{
+				long itemsCount = (long)testCase[2];
+				if (itemsCount == 0)
+				{
+					continue;
+				}
+
+				var itemIndexes = CreateItemIndexVariants(itemsCount, (int)testCase[3])
+					.Where(_ => IsValidBlockSize((long)testCase[2], (int)testCase[3]));
+
+				var itemIndexesWithRange = itemIndexes.SelectMany(
+					   itemIndex => CombineItemIndexWithRange(itemIndex, itemsCount))
+					.ToArray();
+
+				yield return new object[] { testCase[0], testCase[1], (long)testCase[2], (int)testCase[3], itemIndexesWithRange };
+			}
+		}
+
+		public static IEnumerable<(long ItemIndex, long RangeItemsCount)> CombineItemIndexWithRange(long itemIndex, long itemsCount)
+		{
+			yield return (0L, Math.Max(itemIndex, 1L));
+			yield return (itemIndex, Math.Max(itemsCount - itemIndex, 1L));
+			yield return (itemIndex, 1L);
+			yield return (Math.Max(0L, itemIndex - 1L), Math.Max(Math.Min(itemsCount - itemIndex, 2L), 1L));
+
+			yield return (0L, 0L);
+			yield return (itemIndex, 0L);
+			yield return (Math.Max(0L, itemIndex - 1L), 0L);
+
+			yield return (0L, 1L);
+			yield return (0L, Math.Max(itemIndex, 1L));
+			yield return (0L, Math.Max(itemIndex, 1L));
+			yield return (0L, Math.Max(itemsCount - itemIndex, 1L));
+			yield return (0L, Math.Max(Math.Min(itemsCount - itemIndex, 2L), 1L));
+		}
+
 		public static IEnumerable<object[]> SourceDataWithBlockSizeWithItemIndexVariants { get; } = CombineSourceRefDataWithBlockSizeWithItemIndex(false);
+		public static IEnumerable<object[]> SourceDataWithBlockSizeWithItemIndexWithRangeVariants { get; } = CombineSourceRefDataWithBlockSizeWithItemIndexWithRange(false);
 		public static IEnumerable<object[]> SourceRefDataWithBlockSizeWithItemIndexVariants { get; } = CombineSourceRefDataWithBlockSizeWithItemIndex(true);
+		public static IEnumerable<object[]> SourceRefDataWithBlockSizeWithItemIndexWithRangeVariants { get; } = CombineSourceRefDataWithBlockSizeWithItemIndexWithRange(true);
 	}
 }
