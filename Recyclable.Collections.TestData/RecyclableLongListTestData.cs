@@ -318,6 +318,12 @@ namespace Recyclable.Collections.TestData
 			yield return (0L, Math.Max(itemIndex, 1L));
 			yield return (0L, Math.Max(itemsCount - itemIndex, 1L));
 			yield return (0L, Math.Max(Math.Min(itemsCount - itemIndex, 2L), 1L));
+
+			var rangeSize = (int)Math.Min(itemsCount - itemIndex, 4);
+			yield return ((int)(rangeSize > 2 ? Math.Max(0, itemIndex - 2) : itemIndex), rangeSize);
+
+			rangeSize = (int)Math.Max(Math.Min(itemsCount - itemIndex - 2, 4), 0);
+			yield return ((int)(rangeSize > 2 ? Math.Max(0, itemIndex - 2 - 1) : Math.Max(0, itemIndex - 1)), rangeSize);
 		}
 
 		public static IEnumerable<object[]> SourceDataWithBlockSizeWithItemIndexVariants { get; } = CombineSourceRefDataWithBlockSizeWithItemIndex(false);
