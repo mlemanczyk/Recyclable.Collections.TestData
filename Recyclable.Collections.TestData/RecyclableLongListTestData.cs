@@ -378,7 +378,7 @@ namespace Recyclable.Collections.TestData
 		public static IEnumerable<(string TestCase, IEnumerable<long> TestData, long ItemsCount)> SourceDataVariants { get; } = CreateSourceDataVariants();
 		public static IEnumerable<object[]> SourceDataTestCases { get; } = SourceDataVariants.Select(x => new object[] { x.TestCase, x.TestData, x.ItemsCount });
 		public static IEnumerable<object[]> SourceDataWithBlockSizeTestCases { get; } = SourceDataWithBlockSizeVariants.Select(x => new object[] { x.TestCase, x.TestData, x.ItemsCount, x.BlockSize });
-		public static IEnumerable<(string TestCase, IEnumerable<long> TestData, long ItemsCount, int BlockSize)> SourceDataWithBlockSizeVariants => CombineSourceDataWithBlockSize(CreateSourceDataVariants());
+		public static IEnumerable<(string TestCase, IEnumerable<long> TestData, long ItemsCount, int BlockSize)> SourceDataWithBlockSizeVariants { get; } = CombineSourceDataWithBlockSize(CreateSourceDataVariants());
 		public static IEnumerable<(string TestCase, IEnumerable<long> TestData, long ItemsCount, int BlockSize, IEnumerable<long> ItemIndexes)> SourceDataWithBlockSizeWithItemIndexVariants { get; } = CombineSourceDataWithBlockSizeWithItemIndex();
 		public static IEnumerable<object[]> SourceDataWithBlockSizeWithItemIndexTestCases { get; } = SourceDataWithBlockSizeWithItemIndexVariants.Select(x => new object[] { x.TestCase, x.TestData, x.ItemsCount, x.BlockSize, x.ItemIndexes });
 		public static IEnumerable<(string TestCase, IEnumerable<long> TestData, long ItemsCount, int BlockSize, IEnumerable<(long ItemIndex, long RangeItemsCount)> ItemsIndexesWithRange)> SourceDataWithBlockSizeWithItemIndexWithRangeVariants { get; } = CombineSourceDataWithBlockSizeWithItemIndexWithRange();
