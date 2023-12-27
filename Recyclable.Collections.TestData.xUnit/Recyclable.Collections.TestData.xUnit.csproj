@@ -14,7 +14,7 @@
 		<PackageTags>Recyclable Array Pool List Sortable Sort Benchmark Benchmarks Collection Collections Test Data xUnit</PackageTags>
 		<Description>`Recyclable.Collections.TestData.xUnit` project is a basic open source package for working with repeatable xUnit test data useful for testing collections like `RecyclableList&lt;T&gt;`, `RecyclableLongList&lt;T&gt;`, `List&lt;T&gt;`, `SortableList&lt;T&gt;`, `PriorityQueue&lt;T&gt;` &amp; similar.</Description>
 		<PackageProjectUrl>https://github.com/mlemanczyk/Recyclable.Collections.TestData</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/mlemanczyk/Recyclable.Collections.TestData.xUnit</RepositoryUrl>
+		<RepositoryUrl>https://github.com/mlemanczyk/Recyclable.Collections.TestData/tree/main/Recyclable.Collections.TestData.xUnit</RepositoryUrl>
 		<Copyright>Marek Lemańczyk 2023</Copyright>
 		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
