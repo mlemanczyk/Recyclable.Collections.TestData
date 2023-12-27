@@ -12,24 +12,57 @@ namespace Recyclable.Collections.TestData
 			static IEnumerable<(long ItemIndex, long RangeItemsCount)> GenerateRanges(long itemIndex, long itemsCount)
 			{
 				yield return (0L, Math.Max(itemIndex, 1L));
-				yield return (itemIndex, Math.Max(itemsCount - itemIndex, 1L));
+				yield return (itemIndex, itemsCount - itemIndex);
 				yield return (itemIndex, 1L);
-				yield return (Math.Max(0L, itemIndex - 1L), Math.Max(Math.Min(itemsCount - itemIndex, 2L), 1L));
 
 				yield return (0L, 0L);
 				yield return (itemIndex, 0L);
-				yield return (Math.Max(0L, itemIndex - 1L), 0L);
 
 				yield return (0L, 1L);
-				yield return (0L, Math.Max(itemIndex, 1L));
 				yield return (0L, Math.Max(itemsCount - itemIndex, 1L));
-				yield return (0L, 2L);
-
+				
 				var rangeSize = (int)Math.Min(itemsCount - itemIndex, 4);
 				yield return ((int)(rangeSize > 2 ? Math.Max(0, itemIndex - 2) : itemIndex), rangeSize);
 
 				rangeSize = (int)Math.Max(Math.Min(itemsCount - itemIndex - 2, 4), 0);
 				yield return ((int)(rangeSize > 2 ? Math.Max(0, itemIndex - 2 - 1) : Math.Max(0, itemIndex - 1)), rangeSize);
+
+				if (itemsCount > 1)
+				{
+					yield return (0L, 2L);
+				}
+
+				if (itemIndex > 0)
+				{
+
+					if (itemIndex > 1)
+					{
+						yield return (0L, itemIndex);
+
+					}
+
+					yield return (itemIndex - 1, 0L);
+					
+					if (itemsCount > 1)
+					{
+						yield return (itemIndex - 1, 2);
+					}
+
+					if (itemsCount > 2)
+					{
+						yield return (itemIndex - 1, Math.Min(3, itemsCount - itemIndex + 1));
+					}
+
+					if (itemsCount > 3)
+					{
+						yield return ((int)(itemIndex - 1), (int)Math.Min(itemIndex + 1, itemsCount - itemIndex + 1));
+					}
+
+					if (itemIndex >= RecyclableDefaults.MinItemsCountForParallelization)
+					{
+						yield return (itemIndex - RecyclableDefaults.MinItemsCountForParallelization, (int)Math.Min(itemsCount - itemIndex + RecyclableDefaults.MinItemsCountForParallelization, itemIndex + RecyclableDefaults.MinItemsCountForParallelization));
+					}
+				}
 			}
 		}
 
@@ -153,6 +186,11 @@ namespace Recyclable.Collections.TestData
 
 		public static IEnumerable<long> CreateItemIndexVariants(long itemsCount, int blockSize)
 		{
+			if (itemsCount == 0)
+			{
+				return Enumerable.Empty<long>();
+			}
+
 			IEnumerable<long>  primes = InitialItemIndexVariants.Concat(
 				InitialItemIndexVariants.SelectMany(index => new long[] { blockSize - index, blockSize + index })
 				//new long[] { blockSize - 3, blockSize - 2, blockSize - 1, blockSize, blockSize + 1, blockSize + 2, blockSize + 3 }
@@ -166,11 +204,16 @@ namespace Recyclable.Collections.TestData
 
 			primes = primes.Concat(second).ToArray();
 
-			primes = primes.Concat(
-					primes.Select(index => itemsCount - index - 1)
-				)
-				.Where(index => itemsCount > 0 && index >= 0 && index < itemsCount).ToArray()
-				.Distinct().ToArray();
+			primes = primes
+				.Concat(primes
+					.Select(index => itemsCount - index - 1))
+				.Concat(primes
+					.Where(index => index >= RecyclableDefaults.MinItemsCountForParallelization)
+					.Select(index => index - RecyclableDefaults.MinItemsCountForParallelization))
+				.Where(index => index >= 0 && index < itemsCount)
+				.ToArray()
+				.Distinct()
+				.ToArray();
 
 			return primes;
 
@@ -363,6 +406,8 @@ namespace Recyclable.Collections.TestData
 			1, 2, 4, 16, RecyclableDefaults.MinPooledArrayLength - 5, (int)BitOperations.RoundUpToPowerOf2(RecyclableDefaults.MinPooledArrayLength)
 		};
 
+		public static IEnumerable<object[]> BlockSizeTestCases { get; } = BlockSizeVariants.Select(x => new object[] { x });
+
 		public static IEnumerable<(string TestCase, IEnumerable<long> TestData, long ItemsCount)> EmptySourceDataVariants { get; } = CreateSourceDataVariants(0);
 		public static IEnumerable<object[]> EmptySourceDataTestCases { get; } = EmptySourceDataVariants.Select(x => new object[] { x.TestCase, x.TestData, x.ItemsCount });
 		public static IEnumerable<long> InitialItemIndexVariants { get; } = new long[] { 0, 1, 2, 3, 4, 5 };
@@ -377,8 +422,8 @@ namespace Recyclable.Collections.TestData
 		public static IEnumerable<object[]> ItemsCountTestCases { get; } = ItemsCountVariants.Select(x => new object[] { (int)x });
 		public static IEnumerable<(string TestCase, IEnumerable<long> TestData, long ItemsCount)> SourceDataVariants { get; } = CreateSourceDataVariants();
 		public static IEnumerable<object[]> SourceDataTestCases { get; } = SourceDataVariants.Select(x => new object[] { x.TestCase, x.TestData, x.ItemsCount });
-		public static IEnumerable<object[]> SourceDataWithBlockSizeTestCases { get; } = SourceDataWithBlockSizeVariants.Select(x => new object[] { x.TestCase, x.TestData, x.ItemsCount, x.BlockSize });
 		public static IEnumerable<(string TestCase, IEnumerable<long> TestData, long ItemsCount, int BlockSize)> SourceDataWithBlockSizeVariants { get; } = CombineSourceDataWithBlockSize(CreateSourceDataVariants());
+		public static IEnumerable<object[]> SourceDataWithBlockSizeTestCases { get; } = SourceDataWithBlockSizeVariants.Select(x => new object[] { x.TestCase, x.TestData, x.ItemsCount, x.BlockSize });
 		public static IEnumerable<(string TestCase, IEnumerable<long> TestData, long ItemsCount, int BlockSize, IEnumerable<long> ItemIndexes)> SourceDataWithBlockSizeWithItemIndexVariants { get; } = CombineSourceDataWithBlockSizeWithItemIndex();
 		public static IEnumerable<object[]> SourceDataWithBlockSizeWithItemIndexTestCases { get; } = SourceDataWithBlockSizeWithItemIndexVariants.Select(x => new object[] { x.TestCase, x.TestData, x.ItemsCount, x.BlockSize, x.ItemIndexes });
 		public static IEnumerable<(string TestCase, IEnumerable<long> TestData, long ItemsCount, int BlockSize, IEnumerable<(long ItemIndex, long RangeItemsCount)> ItemsIndexesWithRange)> SourceDataWithBlockSizeWithItemIndexWithRangeVariants { get; } = CombineSourceDataWithBlockSizeWithItemIndexWithRange();
