@@ -376,7 +376,7 @@ namespace Recyclable.Collections.TestData
 			yield return ($"T[{itemsCount}]", testRefData, itemsCount);
 		}
 
-		public static IEnumerable<(long ItemsCount, int BlockSize)> CreateTargetDataVariants()
+		public static IEnumerable<(long ItemsCount, int BlockSize)> CreateItemsCountWithBlockSizeVariants()
 		{
 			foreach (var itemsCount in ItemsCountVariants)
 			{
@@ -420,6 +420,8 @@ namespace Recyclable.Collections.TestData
 		};
 
 		public static IEnumerable<object[]> ItemsCountTestCases { get; } = ItemsCountVariants.Select(x => new object[] { (int)x });
+		public static IEnumerable<(long ItemsCount, int BlockSize)> ItemsCountWithBlockSizeVariants { get; } = CreateItemsCountWithBlockSizeVariants();
+		public static IEnumerable<object[]> ItemsCountWithBlockSizeTestCases { get; } = ItemsCountWithBlockSizeVariants.Select(x => new object[] { x.ItemsCount, x.BlockSize });
 		public static IEnumerable<(string TestCase, IEnumerable<long> TestData, long ItemsCount)> SourceDataVariants { get; } = CreateSourceDataVariants();
 		public static IEnumerable<object[]> SourceDataTestCases { get; } = SourceDataVariants.Select(x => new object[] { x.TestCase, x.TestData, x.ItemsCount });
 		public static IEnumerable<(string TestCase, IEnumerable<long> TestData, long ItemsCount, int BlockSize)> SourceDataWithBlockSizeVariants { get; } = CombineSourceDataWithBlockSize(CreateSourceDataVariants());
@@ -441,7 +443,5 @@ namespace Recyclable.Collections.TestData
 		public static IEnumerable<object[]> SourceRefDataWithBlockSizeWithItemIndexWithRangeTestCases { get; } = SourceRefDataWithBlockSizeWithItemIndexWithRangeVariants.Select(x => new object[] { x.TestCase, x.TestData, x.ItemsCount, x.BlockSize, x.ItemsIndexesWithRange });
 		public static IEnumerable<(string TestCase, IEnumerable<object> TestData, long ItemsCount, IEnumerable<long> ItemIndexes)> SourceRefDataWithItemIndexVariants { get; } = CreateSourceRefDataWithItemIndexVariants();
 		public static IEnumerable<object[]> SourceRefDataWithItemIndexTestCases { get; } = SourceRefDataWithItemIndexVariants.Select(x => new object[] { x.TestCase, x.TestData, x.ItemsCount, x.ItemIndexes });
-		public static IEnumerable<(long ItemsCount, int BlockSize)> TargetDataVariants { get; } = CreateTargetDataVariants();
-		public static IEnumerable<object[]> TargetDataTestCases { get; } = TargetDataVariants.Select(x => new object[] { x.ItemsCount, x.BlockSize });
 	}
 }
