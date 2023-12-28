@@ -6,7 +6,7 @@ namespace Recyclable.Collections.TestData.xUnit
 	{
 		public ItemsCountWithBlockSizeTheoryData()
 		{
-			foreach (var (ItemsCount, BlockSize) in RecyclableLongListTestData.TargetDataVariants)
+			foreach (var (ItemsCount, BlockSize) in RecyclableLongListTestData.ItemsCountWithBlockSizeVariants)
 			{
 				Add(ItemsCount, BlockSize);
 			}
