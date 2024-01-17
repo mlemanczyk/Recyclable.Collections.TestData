@@ -2,6 +2,7 @@
 `Recyclable.Collections.TestData.xUnit` project is a basic open source package for working with repeatable xUnit test data useful for testing collections like `RecyclableList&lt;T&gt;`, `RecyclableLongList&lt;T&gt;`, `List&lt;T&gt;`, `SortableList&lt;T&gt;`, `PriorityQueue&lt;T&gt;` &amp; similar.
 
 ## Included
+* `BigSourceDataWithOutOfRangeItemIndexesWithRangeTheoryData: TheoryData<string TestCase, IEnumerable<long> TestData, long ItemsCount, int BlockSize, IEnumerable<(long ItemIndex, long RangeStartItemIndex, long RangeItemsCount)> ItemIndexesWithRange>`
 * `BlockSizeTheoryData: TheoryData<int BlockSize>`
 * `EmptySourceDataTheoryData: TheoryData<string TestCase, IEnumerable<long> TestData, long ItemsCount>`
 * `ItemsCountTheoryData: TheoryData<long ItemsCount>`
