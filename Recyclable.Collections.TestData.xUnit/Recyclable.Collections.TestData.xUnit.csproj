@@ -36,8 +36,8 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.ObjectPool" Version="8.0.0" />
 		<PackageReference Include="Open.Numeric.Primes" Version="3.1.0" />
-		<PackageReference Include="Recyclable.Collections" Version="0.0.6.1" />
-		<PackageReference Include="Recyclable.Collections.TestData" Version="0.0.3.4" />
+		<PackageReference Include="Recyclable.Collections" Version="0.0.6.2" />
+		<PackageReference Include="Recyclable.Collections.TestData" Version="0.0.3.5" />
 		<PackageReference Include="xunit.extensibility.core" Version="2.6.4" />
 	</ItemGroup>
 
