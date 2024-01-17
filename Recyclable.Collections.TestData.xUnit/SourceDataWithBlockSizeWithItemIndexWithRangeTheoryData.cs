@@ -6,9 +6,9 @@ namespace Recyclable.Collections.TestData.xUnit
 	{
 		public SourceDataWithBlockSizeWithItemIndexWithRangeTheoryData()
 		{
-			foreach (var testCase in RecyclableLongListTestData.SourceDataWithBlockSizeWithItemIndexWithRangeVariants)
+			foreach (var tc in RecyclableLongListTestData.SourceDataWithBlockSizeWithItemIndexWithRangeVariants)
 			{
-				Add(testCase.TestCase, testCase.TestData, testCase.ItemsCount, testCase.BlockSize, testCase.ItemsIndexesWithRange);
+				Add(tc.TestCase, tc.TestData, tc.ItemsCount, tc.BlockSize, tc.ItemsIndexesWithRange);
 			}
 		}
 	}
