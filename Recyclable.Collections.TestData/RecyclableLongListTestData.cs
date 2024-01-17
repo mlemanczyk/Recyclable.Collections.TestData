@@ -184,6 +184,25 @@ namespace Recyclable.Collections.TestData
 			}
 		}
 
+		public static IEnumerable<(string TestCase, IEnumerable<long> TestData, long ItemsCount, int BlockSize)> CreateBigSourceDataWithBlockSize()
+		{
+			long itemsCount = Array.MaxLength;
+			using var testData = CreateTestData(itemsCount).ToRecyclableLongList();
+			foreach (var blockSize in BlockSizeVariants)
+			{
+				yield return ($"long[{itemsCount}]", testData, itemsCount, blockSize);
+			}
+		}
+
+		public static IEnumerable<(string TestCase, IEnumerable<long> TestData, long ItemsCount, int BlockSize, IEnumerable<(long ItemIndex, long RangeStartItemIndex, long RangeItemsCount)> ItemIndexesWithRange)> CreateBigSourceDataWithOutOfRangeItemIndexesWithRange()
+		{
+			foreach (var tc in CreateBigSourceDataWithBlockSize())
+			{
+				var outOfRangeItemIndexesWithRanges = CreateOutOfRangeItemIndexesWithRanges(tc.ItemsCount, tc.BlockSize).ToArray();
+				yield return (tc.TestCase, tc.TestData, tc.ItemsCount, tc.BlockSize, outOfRangeItemIndexesWithRanges);
+			}
+		}
+
 		public static IEnumerable<long> CreateItemIndexVariants(long itemsCount, int blockSize)
 		{
 			if (itemsCount == 0)
@@ -250,6 +269,27 @@ namespace Recyclable.Collections.TestData
 			//}
 
 			//return CreateItemIndexVariants();
+		}
+
+		public static IEnumerable<(long ItemIndex, long RangeStartItemIndex, long RangeItemsCount)> CreateOutOfRangeItemIndexesWithRanges(long itemsCount, int blockSize)
+		{
+			var itemIndexes = CreateItemIndexVariants(itemsCount, blockSize);
+			foreach (var itemIndexForGenerator in itemIndexes)
+			{
+				var itemRanges = CombineItemIndexWithRange(itemIndexForGenerator, itemsCount);
+				foreach (var (itemIndex, rangedItemsCount) in itemRanges)
+				{
+					if (itemIndex > 0)
+					{
+						yield return (itemIndex - 1, itemIndex, rangedItemsCount);
+					}
+
+					if (itemIndex + rangedItemsCount < itemsCount)
+					{
+						yield return (itemIndex + rangedItemsCount, itemIndex, rangedItemsCount);
+					}
+				}
+			}
 		}
 
 		public static IEnumerable<object> CreateRefTestData(long itemsCount)
@@ -406,6 +446,8 @@ namespace Recyclable.Collections.TestData
 			1, 2, 4, 16, RecyclableDefaults.MinPooledArrayLength - 5, (int)BitOperations.RoundUpToPowerOf2(RecyclableDefaults.MinPooledArrayLength)
 		};
 
+		public static IEnumerable<(string TestCase, IEnumerable<long> TestData, long ItemsCount, int BlockSize)> BigSourceDataWithBlockSizeVariants { get; } = CreateBigSourceDataWithBlockSize();
+		public static IEnumerable<(string TestCase, IEnumerable<long> TestData, long ItemsCount, int BlockSize, IEnumerable<(long ItemIndex, long RangeStartItemIndex, long RangeItemsCount)> ItemIndexesWithRange)> BigSourceDataWithOutOfRangeItemIndexesWithRangeVariants { get; } = CreateBigSourceDataWithOutOfRangeItemIndexesWithRange();
 		public static IEnumerable<object[]> BlockSizeTestCases { get; } = BlockSizeVariants.Select(x => new object[] { x });
 
 		public static IEnumerable<(string TestCase, IEnumerable<long> TestData, long ItemsCount)> EmptySourceDataVariants { get; } = CreateSourceDataVariants(0);
