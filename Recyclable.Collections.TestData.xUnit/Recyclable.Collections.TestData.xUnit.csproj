@@ -7,7 +7,7 @@
 		<OutputType>Library</OutputType>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageId>Recyclable.Collections.TestData.xUnit</PackageId>
-		<PackageVersion>0.0.0.2</PackageVersion>
+		<PackageVersion>0.0.0.3</PackageVersion>
 		<Authors>Marek Lemańczyk</Authors>
 		<Company>N/A</Company>
 		<Product>Recyclable.Collections.TestData.xUnit</Product>
@@ -19,7 +19,7 @@
 		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryType>git</RepositoryType>
-		<PackageReleaseNotes>BigSourceDataWithOutOfRangeItemIndexesWithRangeTheoryData added.</PackageReleaseNotes>
+		<PackageReleaseNotes>Big sources will contain only items count + block sizes if the number of blocks fits max array size.</PackageReleaseNotes>
 		<Platforms>AnyCPU;x64</Platforms>
 		<PackageIcon>logo.png</PackageIcon>
 	</PropertyGroup>
@@ -37,7 +37,7 @@
 		<PackageReference Include="Microsoft.Extensions.ObjectPool" Version="8.0.0" />
 		<PackageReference Include="Open.Numeric.Primes" Version="3.1.0" />
 		<PackageReference Include="Recyclable.Collections" Version="0.0.6.2" />
-		<PackageReference Include="Recyclable.Collections.TestData" Version="0.0.3.5" />
+		<PackageReference Include="Recyclable.Collections.TestData" Version="0.0.3.6" />
 		<PackageReference Include="xunit.extensibility.core" Version="2.6.4" />
 	</ItemGroup>
 
