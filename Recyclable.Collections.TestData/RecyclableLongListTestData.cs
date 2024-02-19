@@ -190,7 +190,10 @@ namespace Recyclable.Collections.TestData
 			using var testData = CreateTestData(itemsCount).ToRecyclableLongList();
 			foreach (var blockSize in BlockSizeVariants)
 			{
-				yield return ($"long[{itemsCount}]", testData, itemsCount, blockSize);
+				if (IsValidBlockSize(itemsCount, blockSize))
+				{
+					yield return ($"long[{itemsCount}]", testData, itemsCount, blockSize);					
+				}
 			}
 		}
 
@@ -439,7 +442,7 @@ namespace Recyclable.Collections.TestData
 				yield return index;
 			}
 		}
-		public static bool IsValidBlockSize(long itemsCount, long blockSize) => itemsCount is < 1024 || blockSize is > 8;
+		public static bool IsValidBlockSize(long itemsCount, long blockSize) => itemsCount is < 1024 || (itemsCount / blockSize + (itemsCount % blockSize > 0 ? 1 : 0) <= Array.MaxLength);
 
 		public static IEnumerable<int> BlockSizeVariants { get; }= new int[]
 		{
